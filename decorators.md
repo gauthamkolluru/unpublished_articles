@@ -3,15 +3,23 @@ title: Decorators
 author: Gautham K
 ---
 
-Since the time I incepted working with Python, I've come across the term "Decorators" at least "m" times and tried learning them "n" times. Where, 
+<center>
+
+    <p>
+        <i>
+            If you can't explain it simple enough, you don't understand it well enough! - <strong>Albert Einstein</strong>
+        </i>
+    </p>
+
+</center>
+
+Since the time I incepted programming with Python, I've come across the term "Decorators" at least "m" times and tried understanding them at least "n" times. Where, 
 
 > "m" &#8712; values > 100 &#38; , 
 
 > "n" &#8712; values > 10 !
 
-So this time, I decided to write an article, explaining what I understand of it, provided, I understand it in the first place &#129322; .
-
-And so, let's jump directly, not into conclusions but into concept.
+I learnt the concept quite a few times but never could remember. Lately, once again, I realised I don't remember it anymore again and then thought, maybe I don't understand it in the first place and thought of learning it again. But this time, I decided to explain what I understand of it, provided, I understand it in the first place &#129322; .
 
 Let's try understanding it by breaking the concept into the following topics:
 
@@ -19,104 +27,157 @@ Let's try understanding it by breaking the concept into the following topics:
 * Creating a decorator
 * Calling a decorator
 
+Therefore, let's jump directly, not into conclusions but into the concept.
+
 ### Defining a Decorator
 
 _Definition :_ (simply put) A decorator, is a function, that is used to, tweak the functionality(s), of another function.
 
-Well defined, right? A definition as good as any other Greek or Latin movie that we've watched recently, isn't it?
+(Well defined, right? A definition just as good as any other Greek or Latin movie that we've watched recently, isn't it?)
 
-No worries, let's break it further.
+No worries, let's break it further. From the definition above, we can be sure that, 
 
-1. From the definition above, we're sure that all decorators involve is _functions_. isn't it?
+1. All that a decorator is involved is _functions_. isn't it?
 
-2. A decorator also, is nothing but a _function_. (Nice, very good very good)
+2. A decorator is itself just a _function_. (Nice, very good! very good!!)
 
-3. A decorator, is a function, that accepts a function as an argument and returns a function.
+3. A decorator, is a _function_, that accepts a _function_ as an argument and returns a _function_.
 
-After realising the 3rd point above, that first thought that stuck my mind was, "So, it the capability of '_first-class_ objects' that is the _culprit_."
+After realising the 3rd point above, that first thought that stuck my mind was, "So, it the capability of being '_first-class_ objects' that is the _culprit_."
 
-Anyways, let's try turning the human readable language above into machine (or, Python virtual machine, to be precise) readable language.
+Anyways, let's try turning the human readable text above into machine (or, Python virtual machine, to be precise) readable text as follows.
 
 ### Creating a Decorator
 
 Consider the following statement:
 
-> Create a decorator, that could convert the given numeric arguments to a function, into floating point values and then execute the function.
+> let's have a function, called as `summer` (sum'mer, &#128540; ), used to _sum_ the arguments given to it, as follows
 
-the definition of such a decorator should look something like the following code block.
+``` python
+
+# summer : a function that sums it's arguments
+
+def summer(a, b):
+    return a + b
+```
+
+By the signature of the above function, it is sure that it returns a, 
+
+* integer if integers are passed as arguments
+
+* float if floats are passed as arguments
+
+However, I want the `summer` function to return float values even if its arguments are integers but don't want to change the it's signature.
+
+> Decorators to the rescue, let's create a decorator, that could convert any numeric arguments given to a function, into float values.
+
+the definition of such a decorator would look something like the following:
 
 ``` python
 
 def float_decorator(arg_func):
 
-    def other_function(*args):
+    def other_function(p, q):
 
-        arg_func([float(i) for i in args])
+        return arg_func(float(p), float(q))
 
     return other_function
 
 ```
 
-Analysis of the code above:
+As discussed earlier, 
 
-* `float_decorater` is a function that takes a function as an argument, which is denoted by the parameter `arg_func` .
-* The function `float_decorater` 's definition contains the definition another function called as, `other_function` which is being called by the `float_decorater` function.
-* This `other_function` , that is defined in the function definition of `float_decorater` is converting the arguments to the `arg_func` into float with the help of this list comprehension `[float(i) for i in args]` .
+* a decorator is just a _function_, in our case `float_decorator` (1st line in code block above)
+* the _decorator function_ accepts another _function_ as an argument, in our case `arg_func` => `arg_func` is just a local variable, within the scope / namespace of `float_decorator` , that will be referring to a function passed as an argument
+* the decorator must host the definition for another _function_ (here, `other_function` ) (2nd line in code block above), which actually modifies the functionality of the function that is referred by `arg_func` (3rd line in the code block above)
+* the function that is defined in the _decorating function ( `float_decorator` )_ , has to be called by the _decorating function_ itself, which here case is, `other_function` (4th line in the code block above)
 
-I hope, things seem as clear as a thick monsoon cloud, right? 
-
-Never mind, let's consider the following functions for which the functionalities has to be tweaked and during the process, re-examine how a python interpreter would interpret it.
+> Stop, Go back, Understand & Proceed!
 
 ### Calling a Decorator
 
-But to do so, we've look at how to use this decorator.
+At the end of the day, even a _decorator_ is a _function_, isn't it?
 
-After all, even a _ `decorator` _ is nothing but a _ `function` _, isn't it?
+=> even it has to be `called` if it has to be put to work, how to do so?
 
-=> even it has to be `called` if it has to be put to work.
+Calling the decorator function can be done in 2 ways:
 
-Calling the decorator functions can be done in 2 ways:
+* Type 1 : By passing a function, as an argument to the decorating function
 
-* Type 1 : By passing the regular function that we have created, as an argument to the decorating function
+* Type 2 : By calling the decorators in a more simpler or usual syntax, provided by Python
 
-* Type 2 : By calling the decorators in a more simpler or usual way, provided by Python
-
-> For the purpose of understanding this, lets first create 2 simple functions, one for getting the _sum of arguments_ and other for getting the _product of arguments_, as below.
+#### Type 1 : Passing a function, as an argument
 
 ``` python
 
 # summer : a function that sums it's arguments
 
-def summer(*args):
-    return sum(args)
+decorated_summer = float_decorator(summer)
 
-# producer : a function that find the product of it's arguments
+result = decorated_summer(5,6)
 
-def producer(*args):
-    prod = 1
-    for arg in args:
-        prod *= arg
-    return prod
+print(result)
+
+# output
+
+11.0 # Float value
 ```
 
-=> Lets assume that we want the above `summer` () and `producer` functions to return _floating_ values, even if they were provided with _integer_ arguments.
+In the first line of the code block above, the _function_ `summer` is being passed as an argument to the _decorating function_ ( `float_decorator` )
 
-To do so, all we require to do is to add a line just before each function's definition, as follows
+=> the identifier `result` now points to decorated_summer() function, that modifies the arguments and and pass them to the function, resulting in _float values_.
 
-> The line to add : @decorator_function ('@' followed by the 'decorator name') as follows
+The advantage which such special function is, just like any function, they are reusable.
+
+Therefore, let's examine, how to call/invoke a decorator in another way.
+
+#### Type 2 : A more simpler / usual syntax as provided by Python
+
+This way of calling a decorator, the decorator name, with an ' &#64; ', should preceed the actual function definition, as follows.
 
 ``` python
 
 # summer : a function that sums it's arguments
-@decorator_function
-def summer(*args):
-    return sum(args)
+@float_decorator
+def summer(a, b):
+    return a + b
 
-# producer : a function that find the product of it's arguments
-@decorator_function
-def producer(*args):
-    prod = 1
-    for arg in args:
-        prod *= arg
-    return prod
+# producer : a function that finds the product of it's arguments
+@float_decorator
+def producer(a, b):
+    return a * b
+```
+
+This way, one can simply define their functions and add a decorator as and when required.
+
+Let's check the output of the calling of such functions.
+
+``` python
+x = summer(3, 5)
+
+print("x : ", x)
+```
+
+**Output**
+
+``` bat
+[Running] python -u "c:\Users\~\rough.py"
+x :  8.0
+
+[Done] exited with code=0 in 0.343 seconds
+```
+
+``` python
+y = producer(3, 5)
+
+print("y : ", y)
+```
+
+**Output**
+
+``` bat
+[Running] python -u "c:\Users\~\rough.py"
+y :  15.0
+
+[Done] exited with code=0 in 0.512 seconds
 ```
