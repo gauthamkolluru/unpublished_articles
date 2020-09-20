@@ -4,13 +4,11 @@ author: Gautham K
 ---
 
 <center>
-
-    <p>
-        <i>
-            If you can't explain it simple enough, you don't understand it well enough! - <strong>Albert Einstein</strong>
-        </i>
-    </p>
-
+<p>
+<i>
+If you can't explain it simple enough, you don't understand it well enough! - <strong>Albert Einstein</strong>
+</i>
+</p>
 </center>
 
 Since the time I incepted programming with Python, I've come across the term "Decorators" at least "m" times and tried understanding them at least "n" times. Where, 
